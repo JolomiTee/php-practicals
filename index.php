@@ -151,7 +151,6 @@
 
 
 
-
     <!-- <div>
         <ul>
             <?php foreach ($products as $product) { ?>
