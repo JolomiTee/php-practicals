@@ -179,38 +179,85 @@ echo '<pre>';
     // unlink('./func/index22.php') ? 'file deleted successfully' :  'file couldnt be deleted';
 
     // the file exists can be called first before unlinking
-    if (file_exists('./func/index22.php')){
-        unlink('./func/index22.php');
-        echo 'file deleted successfully';
+    // if (file_exists('./func/index22.php')){
+    //     unlink('./func/index22.php');
+    //     echo 'file deleted successfully';
+    // } else {
+    //     echo 'file couldnt be deleted';
+    // }
+
+    // // updating files
+    // $fh = fopen("index.php", 'r+') or die('FAiled to open file');
+    // $text =fgets($fh);
+
+    // if(flock($fh, LOCK_EX)){
+
+        
+    //     fseek($fh, 0, SEEK_END);
+    //     fwrite($fh, '$text') or die("Could not write to file");
+    //     flock($fh, LOCK_UN);
+    // }
+    // fclose($fh);
+        
+    // echo "File 'index.php' successfully updates";
+
+
+    // UPLOADING FILES
+    echo <<<_END
+    <html><head><title>PHP Form Upload</title></head><body>
+    <form method="post" action="practical PHP.php" enctype='multipart/form-data'>
+    Select JPG, PNG, TIF or GIF file: <input type='file' name='filename' size='10'>
+    <input type="submit" value='Upload'>
+    </form>
+    _END;
+
+    if ($_FILES)
+    {
+        $name = $_FILES['filename']['name'];
+        // to sanitize the input
+        // $name = strtolower(preg_replace("[^A-Za-z0-9.", "", $name));
+        switch($_FILES['filename']['type'])
+        {
+            case 'image/jpeg': $ext = 'jpg'; break;
+            case 'image/gif': $ext = 'gif'; break;
+            case 'image/png': $ext = 'png'; break;
+            case 'image/tiff': $ext = 'tif'; break;
+            default: $ext = ''; break;
+        }
+        if ($ext)
+        {
+            $n = "image.$ext";
+            move_uploaded_file($_FILES['filename']['tmp_name'], $n);
+            echo "Uploaded image '$name' as '$n':<br>";
+            echo "<img src='$n'>";
+        }
+        else echo "'$name' is not an accepted image file";
+    }
+    else echo "No image has been uploaded";
+    
+    
+    echo "</body></html>";
+
+    echo'</pre>';
+    
+    
+    echo '<br/>';echo '<br/>';
+
+    $cmd = "dir";
+
+    exec(escapeshellcmd($cmd), $output, $status);
+
+    if ($status){
+        echo "Exec command failed";
+
     } else {
-        echo 'file couldnt be deleted';
-    }
-
-    // updating files
-    $fh = fopen("index.php", 'r+') or die('FAiled to open file');
-    $text =fgets($fh);
-
-    if(flock($fh, LOCK_EX)){
-
-        
-        fseek($fh, 0, SEEK_END);
-        fwrite($fh, '$text') or die("Could not write to file");
-        flock($fh, LOCK_UN);
-    }
-    fclose($fh);
-        
-    echo "File 'index.php' successfully updates";
+        echo "<pre>";
+        foreach($output as $line) echo htmlspecialchars("$line\n");
+        echo "</pre>";
+    } 
 
 
 
-
-
-
-
-
-
-echo'</pre>';
-
-
+   
 
 ?>
